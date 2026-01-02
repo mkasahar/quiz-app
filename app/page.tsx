@@ -18,6 +18,8 @@ export default function Home() {
   const [showResult, setShowResult] = useState(false);
   const [isCorrect, setIsCorrect] = useState<boolean | null>(null);
 
+  const [allQuestions, setAllQuestions] = useState<QuizRow[]>([]);
+
   const pickRandomQuestions = (all: QuizRow[], count: number) => {
     const shuffled = [...all].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, count);
@@ -32,6 +34,7 @@ export default function Home() {
       skipEmptyLines: true,
       complete: (results) => {
         const all = results.data as QuizRow[];
+        setAllQuestions(all);
         const selected = pickRandomQuestions(all, 10);
         setQuestions(selected);
         setLoaded(true);
@@ -55,6 +58,15 @@ export default function Home() {
     setCurrentIndex((prev) => prev + 1);
   };
 
+  const resetQuiz = () => {
+    const newQuestions = pickRandomQuestions(allQuestions, 10);
+    setQuestions(newQuestions);
+    setCurrentIndex(0);
+    setScore(0);
+    setShowResult(false);
+    setIsCorrect(null);
+  };
+
   // 全問終了
   if (loaded && currentIndex >= questions.length) {
     return (
@@ -66,7 +78,7 @@ export default function Home() {
 
         {/* リトライボタン */}
         <button
-          onClick={() => location.reload()}
+          onClick={resetQuiz}
           className="w-full py-4 bg-blue-500 text-white text-xl rounded-lg"
         >
           もう一度挑戦する
