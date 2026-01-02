@@ -26,7 +26,7 @@ export default function Home() {
   };
 
   const loadCsv = async () => {
-    const res = await fetch("/quiz.csv");
+    const res = await fetch(`${location.origin}/quiz.csv`);
     const text = await res.text();
 
     Papa.parse(text, {
