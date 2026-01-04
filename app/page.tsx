@@ -11,6 +11,14 @@ type QuizRow = {
   description?: string;
 };
 
+type Stats = {
+  [key: number]: {
+    correct: number;
+    wrong: number;
+  };
+};
+
+
 export default function Home() {
   const [questions, setQuestions] = useState<QuizRow[]>([]);
   const [loaded, setLoaded] = useState(false);
@@ -88,14 +96,15 @@ export default function Home() {
     setIsCorrect(null);
   };
 
-  const loadStats = () => {
+  const loadStats = (): Stats => {
     const data = localStorage.getItem("quiz-stats");
-    return data ? JSON.parse(data) : {};
+    return data ? (JSON.parse(data) as Stats) : {};
   };
 
-  const saveStats = (stats: any) => {
+  const saveStats = (stats: Stats) => {
     localStorage.setItem("quiz-stats", JSON.stringify(stats));
   };
+
 
   // 全問終了
   if (loaded && currentIndex >= questions.length) {
