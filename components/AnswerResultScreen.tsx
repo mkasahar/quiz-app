@@ -7,6 +7,7 @@ type AnswerResultScreenProps = {
   isCorrect: boolean | null;
   userAnswer: string | null;
   onNext: () => void;
+  onTop: () => void;
 };
 
 export const AnswerResultScreen: React.FC<AnswerResultScreenProps> = ({
@@ -15,6 +16,7 @@ export const AnswerResultScreen: React.FC<AnswerResultScreenProps> = ({
   isCorrect,
   userAnswer,
   onNext,
+  onTop,
 }) => {
   const q = questions[currentIndex];
   const stats = loadStats();
@@ -29,6 +31,15 @@ export const AnswerResultScreen: React.FC<AnswerResultScreenProps> = ({
 
   return (
     <div className="text-center flex flex-col gap-6">
+      <div className="flex justify-end">
+        <button
+          onClick={onTop}
+          className="text-sm text-gray-600 hover:text-gray-900 underline"
+        >
+          TOPに戻る
+        </button>
+      </div>
+
       <p className="text-4xl font-extrabold mb-2">
         {isCorrect ? "🎉 正解！" : "❌ 不正解…"}
       </p>

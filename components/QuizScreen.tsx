@@ -4,20 +4,30 @@ type QuizScreenProps = {
   questions: QuizRow[];
   currentIndex: number;
   onAnswer: (answer: string) => void;
+  onTop: () => void;
 };
 
 export const QuizScreen: React.FC<QuizScreenProps> = ({
   questions,
   currentIndex,
   onAnswer,
+  onTop,
 }) => {
   const q = questions[currentIndex];
 
   return (
     <div>
-      <p className="text-lg mb-4">
-        問題 {currentIndex + 1} / {questions.length}
-      </p>
+      <div className="flex justify-between items-center mb-4">
+        <p className="text-lg">
+          問題 {currentIndex + 1} / {questions.length}
+        </p>
+        <button
+          onClick={onTop}
+          className="text-sm text-gray-600 hover:text-gray-900 underline"
+        >
+          TOPに戻る
+        </button>
+      </div>
 
       <p className="text-sm text-gray-600 mb-2">
         カテゴリ：{q.category}

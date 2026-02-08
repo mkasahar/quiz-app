@@ -9,6 +9,7 @@ import { useQuizState } from "../hooks/useQuizState";
 import { pickRandomQuestions } from "../utils/pickRandomQuestions";
 import { pickWeakQuestions } from "../utils/pickWeakQuestions";
 import { pickCategoryQuestions } from "../utils/pickCategoryQuestions";
+import { pickUnansweredQuestions } from "../utils/pickUnansweredQuestions";
 import { loadStats } from "../utils/statsStorage";
 
 import { TopScreen } from "../components/TopScreen";
@@ -40,7 +41,7 @@ export default function Home() {
         complete: (results) => {
           const parsed = results.data as QuizRow[];
           setAllQuestions(parsed);
-          resolve(parsed); // ← これが重要
+          resolve(parsed);
         },
       });
     });
@@ -67,6 +68,22 @@ export default function Home() {
     quiz.setQuestions(weak);
     quiz.resetQuizState();
     setWeakMode(true);
+    setMode("quiz");
+  };
+
+  const startUnanswered = async () => {
+    const all = await ensureCsvLoaded();
+    const stats = loadStats();
+    const unanswered = pickUnansweredQuestions(all, stats);
+
+    if (unanswered.length === 0) {
+      alert("すべての問題に一度は解答済みです！");
+      return;
+    }
+
+    quiz.setQuestions(unanswered);
+    quiz.resetQuizState();
+    setWeakMode(false);
     setMode("quiz");
   };
 
@@ -121,6 +138,7 @@ export default function Home() {
             isCorrect={quiz.isCorrect}
             userAnswer={quiz.userAnswer}
             onNext={quiz.nextQuestion}
+            onTop={goTop}
           />
         </main>
       );
@@ -132,6 +150,7 @@ export default function Home() {
           questions={quiz.questions}
           currentIndex={quiz.currentIndex}
           onAnswer={quiz.handleAnswer}
+          onTop={goTop}
         />
       </main>
     );
@@ -159,6 +178,7 @@ export default function Home() {
         onRandom={startRandom}
         onCategory={startCategorySelect}
         onWeak={startWeak}
+        onUnanswered={startUnanswered}
         onStats={showStats}
       />
     </main>

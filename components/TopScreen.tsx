@@ -2,6 +2,7 @@ type TopScreenProps = {
   onRandom: () => void | Promise<void>;
   onCategory: () => void | Promise<void>;
   onWeak: () => void | Promise<void>;
+  onUnanswered: () => void | Promise<void>;
   onStats: () => void | Promise<void>;
 };
 
@@ -9,6 +10,7 @@ export const TopScreen: React.FC<TopScreenProps> = ({
   onRandom,
   onCategory,
   onWeak,
+  onUnanswered,
   onStats,
 }) => (
   <>
@@ -22,6 +24,10 @@ export const TopScreen: React.FC<TopScreenProps> = ({
 
     <button onClick={onWeak} className="btn-orange mb-4">
       苦手問題だけ出題
+    </button>
+
+    <button onClick={onUnanswered} className="btn-green mb-4">
+      未解答問題だけ出題
     </button>
 
     <button onClick={onStats} className="btn-gray">
